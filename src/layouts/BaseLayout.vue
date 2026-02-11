@@ -108,11 +108,13 @@
 import { IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonPage, IonTitle, 
 IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonList, IonToolbar, IonAvatar, IonButton } from '@ionic/vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
   
 const router = useRouter();
+const userStore = useUserStore();
 
 async function logout() {
-    await localStorage.removeItem('token');
+    userStore.logout();
     router.push('/login');
 }
 </script>

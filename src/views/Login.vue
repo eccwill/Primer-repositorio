@@ -25,7 +25,9 @@
                 fill="outline" 
                 placeholder="Escribe aquí tu contraseña"
                 v-model="userStore.login.password"
-                type="password">
+                type="password"
+                @keyup.enter="login"
+                >
             </ion-input>
             <ion-button expand="block" class="ion-margin-top" @click="login">Ingresar</ion-button>
         </ion-content>

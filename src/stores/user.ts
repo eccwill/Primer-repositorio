@@ -26,5 +26,8 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    return { login, $login, token }
+    function logout(){
+        $setLogin(null);
+    }
+    return { login, $login, token, logout };
 });
