@@ -129,5 +129,4 @@ async function logout() {
 
     box-shadow: 4px 0px 16px rgba(255, 0, 255, 0.18);
   }
-  
 </style>

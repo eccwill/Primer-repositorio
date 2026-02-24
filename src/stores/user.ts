@@ -9,6 +9,11 @@ export const useUserStore = defineStore('user', () => {
         username: null,
         password: null  
     })
+    const register = ref({
+        username: null,
+        email: null,
+        password: null  
+    })
     
     function $login(){
         return axiosRiksiri.post('/login', login.value).then( res => {
@@ -29,5 +34,13 @@ export const useUserStore = defineStore('user', () => {
     function logout(){
         $setLogin(null);
     }
-    return { login, $login, token, logout };
+
+    function $register(){
+        return axiosRiksiri.post('/register', register.value).then( res => {
+            $setLogin(res.data);
+            return res.data;
+        });
+    }
+
+    return { login, register, $login, $register, token, logout };
 });
