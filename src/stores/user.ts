@@ -1,22 +1,32 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axiosRiksiri from "@/axios/axiosRiksiri";    
+import { useContentStore } from "./content";
 
 export const useUserStore = defineStore('user', () => {
-
+    const contentStore = useContentStore();
     const token = ref(localStorage.getItem('token') || null);
+    const user = ref(JSON.parse(localStorage.getItem('user') || '{}') || null);
     const login = ref({
         username: null,
         password: null  
     })
-    const register = ref({
-        username: null,
+
+    const registro = ref({
+        usuario: null,
         email: null,
-        password: null  
+        password: null,
     })
+
+    function $registro(){
+        return axiosRiksiri.post('register', registro.value).then( res => {
+            $setLogin(res.data);
+            return res.data;
+        })
+    }
     
     function $login(){
-        return axiosRiksiri.post('/login', login.value).then( res => {
+        return axiosRiksiri.post('login', login.value).then( res => {
             $setLogin(res.data);
             return res.data;
         });
@@ -26,21 +36,17 @@ export const useUserStore = defineStore('user', () => {
         token.value = data?.token || null;
         if(token.value) {
             localStorage.setItem('token', token.value);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            user.value = data.user;
+            contentStore.$setMenu(data.menu);
+            contentStore.$setHome(data.home);
         } else {
             localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('menu');
+            localStorage.removeItem('home');
         }
     }
 
-    function logout(){
-        $setLogin(null);
-    }
-
-    function $register(){
-        return axiosRiksiri.post('/register', register.value).then( res => {
-            $setLogin(res.data);
-            return res.data;
-        });
-    }
-
-    return { login, register, $login, $register, token, logout };
+    return { login, $login, token, $setLogin, registro, $registro, user }
 });
